@@ -25,14 +25,47 @@ License: GPL2
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+//Install and Uninstall
+global $app_switcher_db_version;
+$app_switcher_db_version = "0.1";
 
+
+function app_switcher_install () {
+   global $wpdb;
+
+   	$ip_list_table = $wpdb->prefix . "app_switcher_ip_list";
+	$theme_list_table = $wpdb->prefix . "app_switcher_theme_list";
+	if($wpdb->get_var("SHOW TABLES LIKE '$ip_list_table'") != $ip_list_table &&  $wpdb->get_var("SHOW TABLES LIKE '$theme_list_table'") != $theme_list_table) {
+		$sql = "CREATE TABLE " . $ip_list_table . " (
+			  id mediumint(9) NOT NULL AUTO_INCREMENT,
+			  ip text NOT NULL,
+			  theme text NOT NULL,
+			  UNIQUE KEY id (id)
+			);";
+		$sql2 = "CREATE TABLE " . $theme_list_table . " (
+			  id mediumint(9) NOT NULL AUTO_INCREMENT,
+			  theme_name text NOT NULL,
+			  css_location text NOT NULL,
+			  UNIQUE KEY id (id)
+			);";
+
+		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+		dbDelta($sql);
+		dbDelta($sql2);
+		add_option("app_switcher_db_version",$app_switcher_db_version);
+	}
+}
+register_activation_hook(__FILE__,'app_switcher_install');
+
+
+// Plugin Functions
 session_start();
 
 function check_theme_selection(){
 	if(isset($_SESSION['theme'])) { 
-		$theme = $_SESSION['theme'])
+		$theme = $_SESSION['theme'];
 	} elseif(isset($_GET['theme'])) {
-		$theme = $_GET['theme']);
+		$theme = $_GET['theme'];
 	}
 	
 	
@@ -56,27 +89,5 @@ function choose_theme($theme){
 	
 	//switch theme
 }
-
-  
-
-
-function app_switcher_install () {
-   global $wpdb;
-
-   $table_name = $wpdb->prefix . "app_switcher";
-	if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
-		$sql = "CREATE TABLE " . $table_name . " (
-			  id mediumint(9) NOT NULL AUTO_INCREMENT,
-			  ip text NOT NULL,
-			  theme text NOT NULL,
-			  UNIQUE KEY id (id)
-			);";
-
-		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-		dbDelta($sql);
-		
-}
-register_activation_hook(__FILE__,'app_switcher_install');
-
 
 ?>
