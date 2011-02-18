@@ -55,7 +55,23 @@ function app_switcher_install () {
 		add_option("app_switcher_db_version",$app_switcher_db_version);
 	}
 }
+function app_switcher_uninstall () {
+   global $wpdb;
+
+   	$ip_list_table = $wpdb->prefix . "app_switcher_ip_list";
+	$theme_list_table = $wpdb->prefix . "app_switcher_theme_list";
+	
+	$sql = "DROP TABLE $ip_list_table;";
+	$sql2 = "DROP TABLE $theme_list_table;";
+
+	$wpdb->query($sql);
+	$wpdb->query($sql2);
+	
+	delete_option("app_switcher_db_version");
+	
+}
 register_activation_hook(__FILE__,'app_switcher_install');
+register_deactivation_hook(__FILE__,'app_switcher_uninstall');
 
 
 // Plugin Functions
