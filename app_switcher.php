@@ -77,6 +77,9 @@ register_deactivation_hook(__FILE__,'app_switcher_uninstall');
 // Themes Functions
 include 'as_themes.php';
 
+// User Functions
+include 'as_user_check.php';
+
 session_start();
 //
 function check_theme_selection(){
