@@ -74,13 +74,17 @@ register_activation_hook(__FILE__,'app_switcher_install');
 register_deactivation_hook(__FILE__,'app_switcher_uninstall');
 
 
+session_start();
+ob_start();
+//utilities
+include 'as_utilities.php';
 // Themes Functions
 include 'as_themes.php';
 
 // User Functions
 include 'as_user_check.php';
 
-session_start();
+
 //
 function check_theme_selection(){
 	if(isset($_SESSION['theme'])) { 

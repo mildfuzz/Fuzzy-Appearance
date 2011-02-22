@@ -5,12 +5,12 @@
 function as_register_themes(){
 	//list of css files, with theme names
 	$themes = array(
-		"theme 1" => "css/theme-1.css",
-		"theme 2" => "css/theme-2.css",
-		"theme 3" => "css/theme-3.css",
-		"theme 4" => "css/theme-4.css",
-		"theme 5" => "css/theme-5.css",
-		"theme 6" => "css/theme-6.css"
+		"theme_1" => "css/theme-1.css",
+		"theme_2" => "css/theme-2.css",
+		"theme_3" => "css/theme-3.css",
+		"theme_4" => "css/theme-4.css",
+		"theme_5" => "css/theme-5.css",
+		"theme_6" => "css/theme-6.css"
 		
 			
 	);
@@ -31,7 +31,6 @@ function as_register_themes(){
 		}
 		$delete_list = substr($delete_list, 0, -2);//chop last two chars off 
 		$del_sql = $del_sql.$delete_list.");";
-		fb::log($del_sql, $remove);
 		if($remove>0){
 			$wpdb->query($del_sql);
 		}
