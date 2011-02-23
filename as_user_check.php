@@ -33,12 +33,12 @@ function as_create_theme_selection_list(){
 	?><ul id="theme_selection"><?php
 	foreach($results as $result){
 		$theme_name = str_replace('_',' ',$result['theme_name']);
-		?><a href="<?php echo curPageURL(); ?>?theme-selection=<?php echo $result['theme_name']; ?>" id="<?php echo $result['theme_name']; ?>" class="theme"><?php echo $theme_name; ?></a> <?php
+		?><a href="<?php echo addURLQuery("theme-selection=".$result['theme_name']); ?>" id="<?php echo $result['theme_name']; ?>" class="theme"><?php echo $theme_name; ?></a> <?php
 	}
 	?></ul><?php
 	//fb::log($results);
 }
-
+wp_register_sidebar_widget('as_theme_selector','AS Theme Selector','as_create_theme_selection_list');
 function as_log_choice_database(){
 	//process get variables into chosen themes, and redirect page
 	
@@ -89,5 +89,5 @@ function as_theme_choice_processing(){
 }
 
 add_action('wp_head','as_theme_choice_processing');
-as_create_theme_selection_list();
+
 ?>

@@ -29,9 +29,22 @@ if (!function_exists('removeURLQuery')){
 		return $get;
 	}
 }
+if (!function_exists('addURLQuery')){
+	//ADDED SPECIFIED QUERY FROM THE $_GET GLOBAL, can accept arrays. Accepted as string
+	function addURLQuery($query){
+		$query = "?".$query."&";
+		foreach($_GET as $k=>$v){
+			$query .= "$k=$v"."&";
+		}
+		$query = substr($query, 0, -1);//chop last ampersand off
+		$curl = preg_replace('/\?.*/', '', curPageURL()); //get current URL and remove the query string
+		return $curl.$query;
+	}
+}
 
 if (!function_exists('constructQuery')){
 	//BUILDS URL EXPENSION FROM AN ARRAY OF KEY/VALUES
+	
 	function constructQuery($query){
 		if(!is_array($query)) die ("constructQuery requires an array as its argument.");
 		
