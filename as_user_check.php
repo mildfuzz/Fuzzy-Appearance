@@ -33,15 +33,29 @@ function as_create_theme_selection_list(){
 	?><ul id="theme_selection"><?php
 	foreach($results as $result){
 		$theme_name = str_replace('_',' ',$result['theme_name']);
-		?><a href="<?php echo curPageURL(); ?>/?theme-selection=<?php echo $result['theme_name']; ?>" id="<?php echo $result['theme_name']; ?>" class="theme"><?php echo $theme_name; ?></a> <?php
+		?><a href="<?php echo curPageURL(); ?>?theme-selection=<?php echo $result['theme_name']; ?>" id="<?php echo $result['theme_name']; ?>" class="theme"><?php echo $theme_name; ?></a> <?php
 	}
 	?></ul><?php
 	//fb::log($results);
 }
 
 function as_log_choice_database(){
-	//process get varobales intop chosen themes, and redirect page
-	//PROCESS DATABASE
+	//process get variables into chosen themes, and redirect page
+	
+	global $wpdb;
+	$ip = $_SERVER['REMOTE_ADDR'];
+	$user_list_table = $wpdb->prefix . "app_switcher_ip_list";
+	$results = $wpdb->get_results("SELECT theme FROM $user_list_table WHERE ip='$ip'", ARRAY_A);
+	
+	if(count($results)<1){
+		fb::log('INSERT');
+		$wpdb->insert( $user_list_table, array( "ip" => "$ip", "theme" => $_GET['theme-selection'] ));
+	} else {
+		fb::log('UPDATE');
+		$wpdb->update( $user_list_table, array("theme" => $_GET['theme-selection'] ),  array("ip" => $ip));
+	}
+	
+	
 	$url = rebuildURL('theme-selection');
 	header("Location: $url");
 }
