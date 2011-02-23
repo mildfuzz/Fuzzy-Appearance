@@ -31,6 +31,7 @@ if (!function_exists('removeURLQuery')){
 }
 if (!function_exists('addURLQuery')){
 	//ADDED SPECIFIED QUERY FROM THE $_GET GLOBAL, can accept arrays. Accepted as string
+	// RETURNS FULL URL WITH ADDED VARIABLE
 	function addURLQuery($query){
 		$query = "?".$query."&";
 		foreach($_GET as $k=>$v){

@@ -84,35 +84,4 @@ include 'as_themes.php';
 // User Functions
 include 'as_user_check.php';
 
-
-//
-function check_theme_selection(){
-	if(isset($_SESSION['theme'])) { 
-		$theme = $_SESSION['theme'];
-	} elseif(isset($_GET['theme'])) {
-		$theme = $_GET['theme'];
-	}
-	
-	
-	if(!isset($theme) /* AND $theme not appear in theme list*/){
-		return false;
-	} else {
-		return $theme;
-	}
-	
-}
-
-function choose_theme($theme){
-	global $wpdb;
-	$table_name = $wpdb->prefix . "app_switcher";
-	
-	//if $theme does not appear in theme list return false
-	
-	//fetch IP
-	
-	//add IP with theme selection to database
-	
-	//switch theme
-}
-
 ?>
