@@ -10,13 +10,13 @@ add_menu_page("Appearance Switcher","Appearance Switcher",'manage_options',"app_
 function display_app_switcher_settings(){
 			
 			if ( $_SERVER["REQUEST_METHOD"] == "POST" ){
-			    if($_POST['form_value']) upload_check();//run theme uploader scripts
-			
+			    if($_POST['form_value'] == "theme_upload") upload_check();//run theme uploader scripts
+				if($_POST['form_value'] == "theme_management") delete_themes();
 			}
 			
 	         ?><h3 class='title'>Appearance Switcher</h3><?php
 			theme_upload_form();
-	        
+	        theme_manage_form();
 	
 }
 
@@ -44,18 +44,28 @@ function theme_upload_form(){
 	</form><?php
 }
 function theme_manage_form(){
+	global $wpdb;
+	$theme_list_table = $wpdb->prefix . "app_switcher_theme_list";
+	$themes = $wpdb->get_results("SELECT * from $theme_list_table", ARRAY_A);
+	fb::log($themes)
+	
 	?>
 	<form method="post" enctype="multipart/form-data" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
 		<tr valign="top">
 		<th scope="row"><h4 class="section">Theme Management</h4></th>
 		<tr>
 		<td>
-			<input type="hidden" name="MAX_FILE_SIZE" value="100000" />
-			<input type="hidden" name="form_value" value="theme_upload" />
-			<label for="theme_name">Theme Name:</label> <input id="css_upload" name="theme_name" type="text" /><br />
-			<label for="css_upload">CSS File:</label> <input id="css_upload" name="uploadedfile" type="file" /><br />
-			<label for="img_upload">Image File:</label> <input id="img_upload" name="uploadedimage" type="file" /><br />
-		
+			
+			<input type="hidden" name="form_value" value="theme_management" />
+			<table>
+			<?php foreach($themes as $theme):?>
+			<tr>
+				<td><?php echo str_replace('_',' ',$theme['theme_name']); ?></td>
+				<td><img src="<?php echo $theme['image_location'] ; ?>" height="60" /></td>
+				<td><input type="checkbox" name="delete[]" value="<?php echo $theme['id']; ?>"></td>	
+			</tr>		
+			<?php endforeach; ?>
+			</table>
 		
 		
 		</td>
@@ -63,7 +73,7 @@ function theme_manage_form(){
 		</tr>
 		
 	
-	<input type="submit" value="Upload"/>
+	<input type="submit" value="Delete"/>
 	</form><?php
 }
 
@@ -152,6 +162,15 @@ function check_theme_name($theme){
 		return true;
 	} else {
 		return false;
+	}
+}
+/*
+# Processing Functions for Theme Deleting
+*/
+function delete_themes(){
+	foreach ($_POST['delete'] as $del_theme){
+		fb::log($del_theme);
+		//DELETE THEMES AND FILES ASSOCIATED WITH THEMES
 	}
 }
 
