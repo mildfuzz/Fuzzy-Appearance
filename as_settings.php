@@ -29,7 +29,8 @@ function theme_upload_form(){
 			<input type="hidden" name="MAX_FILE_SIZE" value="100000" />
 			<input type="hidden" name="form_value" value="theme_upload" />
 			<label for="theme_name">Theme Name:</label> <input id="css_upload" name="theme_name" type="text" /><br />
-			<label for="css_upload">Choose a file to upload:</label> <input id="css_upload" name="uploadedfile" type="file" /><br />
+			<label for="css_upload">CSS File:</label> <input id="css_upload" name="uploadedfile" type="file" /><br />
+			<label for="img_upload">Image File:</label> <input id="img_upload" name="uploadedfile" type="file" /><br />
 		
 		
 		
@@ -42,9 +43,16 @@ function theme_upload_form(){
 	</form><?php
 }
 
+/*
+# Processing Functions for Theme Uploading
+*/
 function upload_check(){
 	fb::log($_POST);
 	fb::log($_FILES);
+	if(!check_theme_name($_POST['theme_name'])){
+		echo "<h4 class='error'>Theme Name already exists</h4>";
+		$fail = true;
+	}
 	if($_POST['theme_name'] == ""){
 		echo "<h4 class='error'>Must include Theme Name</h4>";
 		$fail = true;
@@ -78,11 +86,31 @@ function upload_process(){
 	$file = $_FILES['uploadedfile']['tmp_name'];
 	
 	$file_move = move_uploaded_file($file,$dir.$file_name);
-	
+	add_to_theme_database();
 	if($file_move){
 		echo "<h3 class='updated'>File Upload Successful</h4>";
 	} else {
 		echo "<h3 class='error'>File Upload Failed</h4>";
 	}
 }
+function add_to_theme_database(){
+	global $wpdb;
+	$theme_list_table = $wpdb->prefix . "app_switcher_theme_list";
+	$theme_name = str_replace(' ','_',$_POST['theme_name']);
+	$css_location = plugins_url("css/".$theme_name.".css", __FILE__);
+	$sql = "INSERT INTO $theme_list_table(theme_name, css_location) VALUES ('$theme_name','$css_location')";
+	$wpdb->query($sql);
+}
+function check_theme_name($theme){
+	global $wpdb;
+	$theme_list_table = $wpdb->prefix . "app_switcher_theme_list";
+	$theme = str_replace(' ','_',$theme);
+	$check =$wpdb->get_results("SELECT * FROM $theme_list_table WHERE theme_name='$theme';", ARRAY_A);
+	if(!isset($check[0])){
+		return true;
+	} else {
+		return false;
+	}
+}
+
 ?>
