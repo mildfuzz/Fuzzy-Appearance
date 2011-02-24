@@ -84,4 +84,8 @@ include 'as_themes.php';
 // User Functions
 include 'as_user_check.php';
 
+//Settings Page;
+include 'as_settings.php';
+
+
 ?>

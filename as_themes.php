@@ -56,6 +56,16 @@ function as_register_themes(){
 		
 }
 
+//Fetch USL of CSS file based on theme name
+function as_fetch_css($theme){
+	global $wpdb;
+	$theme_list_table = $wpdb->prefix . "app_switcher_theme_list";
+	$css = $wpdb->get_results("SELECT css_location FROM $theme_list_table WHERE theme_name='$theme';", ARRAY_A);
+	$css = $css[0]['css_location'];
+	$location = plugins_url($css, __FILE__);
+	return $location;
+}
+
 add_action('wp_head','as_register_themes');
 add_action('admin_head','as_register_themes');
 
