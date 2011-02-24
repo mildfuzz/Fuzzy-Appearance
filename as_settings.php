@@ -8,11 +8,29 @@ fb::log($log);
 //add_settings_field('vimeo_id','Vimeo ID','display_vimeo','general');
 }
 function display_app_switcher_settings(){
-	if ( $_SERVER["REQUEST_METHOD"] == "POST" ){
-	            print "do stuff";
-	    } else {
-	         ?><form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>"><input type="submit" /></form><?php
-	        }
+			if ( $_SERVER["REQUEST_METHOD"] == "POST" ){
+			            fb::log("PUSHED THE BUTTON");
+			}
+			
+	         ?>
+			
+			<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+				<tr valign="top">
+				<th scope="row">Upload Image</th>
+				<td><label for="upload_image">
+				<input id="upload_image" type="text" size="36" name="upload_image" value="" />
+				
+				<br />Enter an URL or upload an image for the banner.
+				</label></td>
+				</tr>
+				
+			
+			<input type="submit" />
+			</form>
+			
+			<?php
+		
+	        
 	
 }
 	
