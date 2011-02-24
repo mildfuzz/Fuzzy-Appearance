@@ -11,6 +11,7 @@ function display_app_switcher_settings(){
 			
 			if ( $_SERVER["REQUEST_METHOD"] == "POST" ){
 			    if($_POST['form_value']) upload_check();//run theme uploader scripts
+			
 			}
 			
 	         ?><h3 class='title'>Appearance Switcher</h3><?php
@@ -30,7 +31,7 @@ function theme_upload_form(){
 			<input type="hidden" name="form_value" value="theme_upload" />
 			<label for="theme_name">Theme Name:</label> <input id="css_upload" name="theme_name" type="text" /><br />
 			<label for="css_upload">CSS File:</label> <input id="css_upload" name="uploadedfile" type="file" /><br />
-			<label for="img_upload">Image File:</label> <input id="img_upload" name="uploadedfile" type="file" /><br />
+			<label for="img_upload">Image File:</label> <input id="img_upload" name="uploadedimage" type="file" /><br />
 		
 		
 		
@@ -73,22 +74,39 @@ function upload_check(){
 		echo "<h4 class='error>Upload Error</h4";
 		$fail = true;
 	}
+	if($_FILES['uploadedimage']['type'] != 'image/png' && $_FILES['uploadedimage']['type'] != 'image/jpeg' && $_FILES['uploadedimage']['type'] != ''){
+		echo "<h4 class='error'>Image must be jpg or png</h4>";
+		$fail = true;
+	}
+	if($_FILES['uploadedimage']['type'] == ''){
+		echo "<h4 class='error'>Must Include an Image File</h4>";
+		$fail = true;
+	}
 	if(!$fail){
 		upload_process();		
 	} 
 	
 }
 function upload_process(){
-	fb::log(plugins_url('/css', __FILE__));
-	fb::log($_FILES['uploadedfile']['tmp_name']);
 	$file_name = str_replace(' ','_',$_POST['theme_name']).'.css';
+	$image_name = $_FILES['uploadedimage']['name'];
 	$dir = ABSPATH . 'wp-content/plugins/app-switcher/css/';
+	$image_dir = ABSPATH . 'wp-content/plugins/app-switcher/images/';
 	$file = $_FILES['uploadedfile']['tmp_name'];
+	$image = $_FILES['uploadedimage']['tmp_name'];
 	
 	$file_move = move_uploaded_file($file,$dir.$file_name);
-	add_to_theme_database();
+	
 	if($file_move){
-		echo "<h3 class='updated'>File Upload Successful</h4>";
+		$image_move = move_uploaded_file($image,$image_dir.$image_name);
+		
+		if($image_move){
+			echo "<h3 class='update'>Upload Successful</h4>";
+			add_to_theme_database();//add to database
+		} else {
+			unlink($dir.$file_name);
+			echo "<h3 class='error'>Failed: Image Upload Failed</h4>";
+		}
 	} else {
 		echo "<h3 class='error'>File Upload Failed</h4>";
 	}
@@ -98,7 +116,8 @@ function add_to_theme_database(){
 	$theme_list_table = $wpdb->prefix . "app_switcher_theme_list";
 	$theme_name = str_replace(' ','_',$_POST['theme_name']);
 	$css_location = plugins_url("css/".$theme_name.".css", __FILE__);
-	$sql = "INSERT INTO $theme_list_table(theme_name, css_location) VALUES ('$theme_name','$css_location')";
+	$image_location = plugins_url("images/".$_FILES['uploadedimage']['name'], __FILE__);
+	$sql = "INSERT INTO $theme_list_table(theme_name, css_location, image_location) VALUES ('$theme_name','$css_location','$image_location')";
 	$wpdb->query($sql);
 }
 function check_theme_name($theme){

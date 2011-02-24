@@ -46,6 +46,7 @@ function app_switcher_install () {
 			  id mediumint(9) NOT NULL AUTO_INCREMENT,
 			  theme_name text NOT NULL,
 			  css_location text NOT NULL,
+			  image_location text NOT NULL,
 			  UNIQUE KEY id (id)
 			);";
 
