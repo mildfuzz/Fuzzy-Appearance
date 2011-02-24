@@ -43,6 +43,29 @@ function theme_upload_form(){
 	<input type="submit" value="Upload"/>
 	</form><?php
 }
+function theme_manage_form(){
+	?>
+	<form method="post" enctype="multipart/form-data" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+		<tr valign="top">
+		<th scope="row"><h4 class="section">Theme Management</h4></th>
+		<tr>
+		<td>
+			<input type="hidden" name="MAX_FILE_SIZE" value="100000" />
+			<input type="hidden" name="form_value" value="theme_upload" />
+			<label for="theme_name">Theme Name:</label> <input id="css_upload" name="theme_name" type="text" /><br />
+			<label for="css_upload">CSS File:</label> <input id="css_upload" name="uploadedfile" type="file" /><br />
+			<label for="img_upload">Image File:</label> <input id="img_upload" name="uploadedimage" type="file" /><br />
+		
+		
+		
+		</td>
+		</tr>	
+		</tr>
+		
+	
+	<input type="submit" value="Upload"/>
+	</form><?php
+}
 
 /*
 # Processing Functions for Theme Uploading
