@@ -3,29 +3,35 @@
 add_action('admin_menu','as_settings_setup');
 
 function as_settings_setup(){
-$log = add_menu_page("Appearance Switcher","Appearance Switcher",'manage_options',"app_switch",'display_app_switcher_settings');	
-fb::log($log);
+add_menu_page("Appearance Switcher","Appearance Switcher",'manage_options',"app_switch",'display_app_switcher_settings');	
+
 //add_settings_field('vimeo_id','Vimeo ID','display_vimeo','general');
 }
 function display_app_switcher_settings(){
+			
 			if ( $_SERVER["REQUEST_METHOD"] == "POST" ){
-			            fb::log("PUSHED THE BUTTON");
+			             upload_check();
 			}
 			
 	         ?>
 			
-			<form method="post" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+			<form method="post" enctype="multipart/form-data" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
 				<tr valign="top">
-				<th scope="row">Upload Image</th>
-				<td><label for="upload_image">
-				<input id="upload_image" type="text" size="36" name="upload_image" value="" />
+				<th scope="row"><h3>Appearance Switcher</h3></th>
+				<tr>
+				<td>
+					<input type="hidden" name="MAX_FILE_SIZE" value="100000" />
+					<label for="theme_name">Theme Name:</label> <input id="css_upload" name="theme_name" type="text" /><br />
+					<label for="css_upload">Choose a file to upload:</label> <input id="css_upload" name="uploadedfile" type="file" /><br />
 				
-				<br />Enter an URL or upload an image for the banner.
-				</label></td>
+				
+				
+				</td>
+				</tr>	
 				</tr>
 				
 			
-			<input type="submit" />
+			<input type="submit" value="Upload"/>
 			</form>
 			
 			<?php
@@ -33,7 +39,50 @@ function display_app_switcher_settings(){
 	        
 	
 }
+function upload_check(){
+	fb::log($_POST);
+	fb::log($_FILES);
+	if($_POST['theme_name'] == ""){
+		echo "<h4 class='error'>Must include Theme Name</h4>";
+		$fail = true;
+	}
+	if($_FILES['uploadedfile']['type'] != 'text/css' && $_FILES['uploadedfile']['type'] != "") {
+		echo "<h4 class='error'>File Not CSS</h4>";
+		$fail = true;
+	}
+	if($_FILES['uploadedfile']['type'] == "") {
+		echo "<h4 class='error'>Must Include a CSS file</h4>";
+		$fail = true;
+	}
+	if($_FILES['uploadedfile']['size'] > $_POST['MAX_FILE_SIZE']) {
+		echo "<h4 class='error> File Not CSS</h4";
+		$fail = true;
+	}
+	if($_FILES['uploadedfile']['error'] != 0) {
+		echo "<h4 class='error>Upload Error</h4";
+		$fail = true;
+	}
+	if(!$fail){
+		upload_process();		
+	} 
 	
+}
+function upload_process(){
+	fb::log(plugins_url('/css', __FILE__));
+	fb::log($_FILES['uploadedfile']['tmp_name']);
+	$file_name = str_replace(' ','_',$_POST['theme_name']).'.css';
+	$dir = ABSPATH . 'wp-content/plugins/app-switcher/css/';
+	$file = $_FILES['uploadedfile']['tmp_name'];
+	
+	$file_move = move_uploaded_file($file,$dir.$file_name);
+	
+	if($file_move){
+		echo "<h3 class='updated'>File Upload Successful</h4>";
+	} else {
+		echo "<h3 class='error'>File Upload Failed</h4>";
+	}
+}
+
 /*function display_vimeo(){
  
  echo '<input  type="text" name="vimeo_id" id="vimeo_id" value="'.attribute_escape(get_option('vimeo_id')).'" class="regular-text code" /> size="30" style="width:85%" />';
