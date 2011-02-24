@@ -2,7 +2,7 @@
 
 
 
-/*function as_register_themes(){
+function as_register_themes(){
 	//list of css files, with theme names
 	$themes = array(
 		"theme_1" => "css/theme-1.css",
@@ -54,7 +54,7 @@
 			$wpdb->query($sql);
 		} 
 		
-}*/
+}
 
 //Fetch USL of CSS file based on theme name
 function as_fetch_css($theme){
