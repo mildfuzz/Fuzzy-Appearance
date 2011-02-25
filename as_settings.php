@@ -47,7 +47,7 @@ function theme_manage_form(){
 	global $wpdb;
 	$theme_list_table = $wpdb->prefix . "app_switcher_theme_list";
 	$themes = $wpdb->get_results("SELECT * from $theme_list_table", ARRAY_A);
-	fb::log($themes)
+	
 	
 	?>
 	<form method="post" enctype="multipart/form-data" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
