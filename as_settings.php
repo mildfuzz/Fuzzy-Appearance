@@ -175,31 +175,28 @@ function delete_themes(){
 	foreach ($_POST['delete'] as $del_theme){
 		$del_sql .= "'$del_theme',";
 		$del_files .= "'$del_theme',";
-		
 	}
 	$del_sql = substr($del_sql,0,-1); //remove last comma
 	$del_files = substr($del_files,0,-1); //remove last comma
-	$del_sql .= ");";
-	$del_files .= ");";
-	fb::log($del_sql);
-		//DELETE THEMES AND FILES ASSOCIATED WITH THEMES
-	$files = $wpdb->get_results($del_files, ARRAY_A);
+	$del_sql .= ");";//SQL statment for deleting from database
+	$del_files .= ");";//SQL for fetching css amd image location for deletion
+	
+	
+	$files = $wpdb->get_results($del_files, ARRAY_A);//fetch file names for deletion
 	$passed = true;
 	foreach($files as $file){
 		foreach($file as $component){
-			
-			if($passed != false ){
-				$component = url_to_abs($component);
-				fb::log($component);
+			if($passed != false ){//will stop deleting after first fail - Could be improved.
+				$component = url_to_abs($component); //concerts URL path to filesystem for deletion
 				$passed = unlink($component);
 			} 
 		}
 		
 	}
-	if ($passed) {
+	if ($passed) {//if all deletes successful, delete from database.
 		$wpdb->query($del_sql);
 	} else {
-		fb::log("DELETE FAILED");
+		echo "<h2 class='warning'>DELETE FAILED</h2>");
 	}//*/
 	//fb::log($files);
 	fb::log(ABSPATH,'ABSPATH');
