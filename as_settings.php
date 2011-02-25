@@ -168,10 +168,47 @@ function check_theme_name($theme){
 # Processing Functions for Theme Deleting
 */
 function delete_themes(){
+	global $wpdb;
+	$theme_list_table = $wpdb->prefix . "app_switcher_theme_list";
+	$del_sql = "DELETE FROM $theme_list_table WHERE id IN (";
+	$del_files = "SELECT css_location, image_location FROM $theme_list_table WHERE id IN (";
 	foreach ($_POST['delete'] as $del_theme){
-		fb::log($del_theme);
-		//DELETE THEMES AND FILES ASSOCIATED WITH THEMES
+		$del_sql .= "'$del_theme',";
+		$del_files .= "'$del_theme',";
+		
 	}
+	$del_sql = substr($del_sql,0,-1); //remove last comma
+	$del_files = substr($del_files,0,-1); //remove last comma
+	$del_sql .= ");";
+	$del_files .= ");";
+	fb::log($del_sql);
+		//DELETE THEMES AND FILES ASSOCIATED WITH THEMES
+	$files = $wpdb->get_results($del_files, ARRAY_A);
+	$passed = true;
+	foreach($files as $file){
+		foreach($file as $component){
+			
+			if($passed != false ){
+				$component = url_to_abs($component);
+				fb::log($component);
+				$passed = unlink($component);
+			} 
+		}
+		
+	}
+	if ($passed) {
+		$wpdb->query($del_sql);
+	} else {
+		fb::log("DELETE FAILED");
+	}//*/
+	//fb::log($files);
+	fb::log(ABSPATH,'ABSPATH');
+	fb::log(plugins_url('',__FILE__),'plugin url');
+}
+
+function url_to_abs($string){
+	$string = str_replace(plugins_url('',__FILE__),ABSPATH.'/wp-content/plugins/app-switcher',$string);
+	return $string;
 }
 
 ?>
