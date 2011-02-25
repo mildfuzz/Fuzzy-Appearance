@@ -8,14 +8,16 @@ add_menu_page("Appearance Switcher","Appearance Switcher",'manage_options',"app_
 //add_settings_field('vimeo_id','Vimeo ID','display_vimeo','general');
 }
 function display_app_switcher_settings(){
-			
+			fb::log($_FILES);
 			if ( $_SERVER["REQUEST_METHOD"] == "POST" ){
 			    if($_POST['form_value'] == "theme_upload") upload_check();//run theme uploader scripts
 				if($_POST['form_value'] == "theme_management") delete_themes();
+				if($_POST['form_value'] == "zip_upload") zip_upload();
 			}
 			
 	         ?><h3 class='title'>Appearance Switcher</h3><?php
 			theme_upload_form();
+			theme_upload_image_zip();
 	        theme_manage_form();
 	
 }
@@ -43,6 +45,40 @@ function theme_upload_form(){
 	<input type="submit" value="Upload"/>
 	</form><?php
 }
+function theme_upload_image_zip(){
+	global $wpdb;
+	$theme_list_table = $wpdb->prefix . "app_switcher_theme_list";
+	$themes = $wpdb->get_results("SELECT theme_name, id from $theme_list_table", ARRAY_A);
+	fb::log($themes);
+	?>
+	<form method="post" enctype="multipart/form-data" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+		<tr valign="top">
+		<th scope="row"><h4 class="section">Image Zip</h4></th>
+		<tr>
+		<td>
+			<input type="hidden" name="MAX_FILE_SIZE" value="100000" />
+			<input type="hidden" name="form_value" value="zip_upload" />
+			<table>
+			<?php foreach($themes as $theme):?>
+			<tr>
+				<td><?php echo str_replace('_',' ',$theme['theme_name']); ?></td>
+				<td><input type="radio" name="theme[]" value="<?php echo $theme['id']; ?>"></td>	
+			</tr>		
+			<?php endforeach; ?>
+			</table><br />
+			<label for="zip_upload">ZIP File:</label> <input id="zip_upload" name="zip_file" type="file" /><br />
+			
+		
+		
+		</td>
+		</tr>	
+		</tr>
+		
+	
+	<input type="submit" value="Upload"/>
+	</form><?php
+}
+
 function theme_manage_form(){
 	global $wpdb;
 	$theme_list_table = $wpdb->prefix . "app_switcher_theme_list";
@@ -81,8 +117,6 @@ function theme_manage_form(){
 # Processing Functions for Theme Uploading
 */
 function upload_check(){
-	fb::log($_POST);
-	fb::log($_FILES);
 	if(!check_theme_name($_POST['theme_name'])){
 		echo "<h4 class='error'>Theme Name already exists</h4>";
 		$fail = true;
@@ -196,7 +230,7 @@ function delete_themes(){
 	if ($passed) {//if all deletes successful, delete from database.
 		$wpdb->query($del_sql);
 	} else {
-		echo "<h2 class='warning'>DELETE FAILED</h2>");
+		echo "<h2 class='warning'>DELETE FAILED</h2>";
 	}//*/
 	//fb::log($files);
 	fb::log(ABSPATH,'ABSPATH');
@@ -207,5 +241,27 @@ function url_to_abs($string){
 	$string = str_replace(plugins_url('',__FILE__),ABSPATH.'/wp-content/plugins/app-switcher',$string);
 	return $string;
 }
-
+/*
+# Processing Functions for zip uploading
+*/
+function zip_upload(){
+	if (validate_zip_upload()){
+		//process_zip_upload();
+	}
+}
+function validate_zip_upload(){
+	if(!isset($_POST['theme'])){
+		echo "<h4 class='error'>Must choose a theme for upload</h4>";
+		$failed = true;
+	}
+	if($_FILES['type'] != 'application/zip'){
+		echo "<h4 class='error'>Must be a zip file</h4>";
+		$failed = true;
+	}
+	if(!$failed){
+		return true;
+	} else {
+		return false;
+	}
+}
 ?>
