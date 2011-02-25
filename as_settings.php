@@ -8,7 +8,7 @@ add_menu_page("Appearance Switcher","Appearance Switcher",'manage_options',"app_
 //add_settings_field('vimeo_id','Vimeo ID','display_vimeo','general');
 }
 function display_app_switcher_settings(){
-			fb::log($_FILES);
+			
 			if ( $_SERVER["REQUEST_METHOD"] == "POST" ){
 			    if($_POST['form_value'] == "theme_upload") upload_check();//run theme uploader scripts
 				if($_POST['form_value'] == "theme_management") delete_themes();
@@ -17,7 +17,7 @@ function display_app_switcher_settings(){
 			
 	         ?><h3 class='title'>Appearance Switcher</h3><?php
 			theme_upload_form();
-			theme_upload_image_zip();
+			theme_upload_image_zip_form();
 	        theme_manage_form();
 	
 }
@@ -45,18 +45,18 @@ function theme_upload_form(){
 	<input type="submit" value="Upload"/>
 	</form><?php
 }
-function theme_upload_image_zip(){
+function theme_upload_image_zip_form(){
 	global $wpdb;
 	$theme_list_table = $wpdb->prefix . "app_switcher_theme_list";
 	$themes = $wpdb->get_results("SELECT theme_name, id from $theme_list_table", ARRAY_A);
-	fb::log($themes);
+	
 	?>
 	<form method="post" enctype="multipart/form-data" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
 		<tr valign="top">
 		<th scope="row"><h4 class="section">Image Zip</h4></th>
 		<tr>
 		<td>
-			<input type="hidden" name="MAX_FILE_SIZE" value="100000" />
+			<input type="hidden" name="MAX_FILE_SIZE" value="1000000000" />
 			<input type="hidden" name="form_value" value="zip_upload" />
 			<table>
 			<?php foreach($themes as $theme):?>
@@ -83,7 +83,7 @@ function theme_manage_form(){
 	global $wpdb;
 	$theme_list_table = $wpdb->prefix . "app_switcher_theme_list";
 	$themes = $wpdb->get_results("SELECT * from $theme_list_table", ARRAY_A);
-	fb::log($themes)
+	
 	
 	?>
 	<form method="post" enctype="multipart/form-data" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
@@ -232,11 +232,9 @@ function delete_themes(){
 	} else {
 		echo "<h2 class='warning'>DELETE FAILED</h2>";
 	}//*/
-	//fb::log($files);
-	fb::log(ABSPATH,'ABSPATH');
-	fb::log(plugins_url('',__FILE__),'plugin url');
+	
+	
 }
-
 function url_to_abs($string){
 	$string = str_replace(plugins_url('',__FILE__),ABSPATH.'/wp-content/plugins/app-switcher',$string);
 	return $string;
@@ -246,15 +244,16 @@ function url_to_abs($string){
 */
 function zip_upload(){
 	if (validate_zip_upload()){
-		//process_zip_upload();
+		process_zip_upload();
 	}
 }
 function validate_zip_upload(){
+	fb::log($_FILES);
 	if(!isset($_POST['theme'])){
 		echo "<h4 class='error'>Must choose a theme for upload</h4>";
 		$failed = true;
 	}
-	if($_FILES['type'] != 'application/zip'){
+	if($_FILES['zip_file']['type'] != 'application/zip'){
 		echo "<h4 class='error'>Must be a zip file</h4>";
 		$failed = true;
 	}
@@ -263,5 +262,24 @@ function validate_zip_upload(){
 	} else {
 		return false;
 	}
+}
+function process_zip_upload(){
+	global $wpdb;
+	$dir = ABSPATH . 'wp-content/plugins/app-switcher/css/images/';
+	$zip = new zipArchive();
+	
+	$x=$zip->open($dir);
+	fb::log($_FILES['zip_file']['tmp_name']);
+	if ($zip->open($_FILES['zip_file']['tmp_name'])){
+	     for($i = 0; $i < $zip->numFiles; $i++){  
+	          fb::log($zip->getNameIndex($i),'Filename: ');
+	     }
+	} else {
+	     fb::log('Error reading zip-archive!');
+	}
+	
+	/*if($x===true){
+		$zip->extractTo
+	}//*/
 }
 ?>
