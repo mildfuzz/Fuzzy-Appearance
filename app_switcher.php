@@ -35,7 +35,8 @@ function app_switcher_install () {
 
    	$ip_list_table = $wpdb->prefix . "app_switcher_ip_list";
 	$theme_list_table = $wpdb->prefix . "app_switcher_theme_list";
-	if($wpdb->get_var("SHOW TABLES LIKE '$ip_list_table'") != $ip_list_table &&  $wpdb->get_var("SHOW TABLES LIKE '$theme_list_table'") != $theme_list_table) {
+	$zip_image_connect_table = $wpdb->prefix . "app_switcher_zip_image_list";
+	if($wpdb->get_var("SHOW TABLES LIKE '$ip_list_table'") != $ip_list_table &&  $wpdb->get_var("SHOW TABLES LIKE '$theme_list_table'") != $theme_list_table &&  $wpdb->get_var("SHOW TABLES LIKE '$zip_image_connect_table'") != $zip_image_connect_table) {
 		$sql = "CREATE TABLE " . $ip_list_table . " (
 			  id mediumint(9) NOT NULL AUTO_INCREMENT,
 			  ip text NOT NULL,
@@ -49,24 +50,32 @@ function app_switcher_install () {
 			  image_location text NOT NULL,
 			  UNIQUE KEY id (id)
 			);";
+		$sql3 = "CREATE TABLE " . $zip_image_connect_table . " (
+			  id mediumint(9) NOT NULL AUTO_INCREMENT,
+			  theme_id mediumint(9) NOT NULL,
+			  image_path text NOT NULL,
+			  UNIQUE KEY id (id)
+			);";
+		
 
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 		dbDelta($sql);
 		dbDelta($sql2);
+		dbDelta($sql3);
 		add_option("app_switcher_db_version",$app_switcher_db_version);
 	}
 }
 function app_switcher_uninstall () {
    global $wpdb;
 
-   	$ip_list_table = $wpdb->prefix . "app_switcher_ip_list";
-	$theme_list_table = $wpdb->prefix . "app_switcher_theme_list";
+   	$tables[] = $wpdb->prefix . "app_switcher_ip_list";
+	$tables[] = $wpdb->prefix . "app_switcher_theme_list";
+	$tables[] = $wpdb->prefix . "app_switcher_zip_image_list";
 	
-	$sql = "DROP TABLE $ip_list_table;";
-	$sql2 = "DROP TABLE $theme_list_table;";
-
-	$wpdb->query($sql);
-	$wpdb->query($sql2);
+	foreach($tables as $table){
+		$wpdb->query("DROP TABLE $table;");
+	}
+	
 	
 	delete_option("app_switcher_db_version");
 	
