@@ -196,7 +196,7 @@ function delete_themes(){
 	if ($passed) {//if all deletes successful, delete from database.
 		$wpdb->query($del_sql);
 	} else {
-		echo "<h2 class='warning'>DELETE FAILED</h2>");
+		echo "<h2 class='warning'>DELETE FAILED</h2>";
 	}//*/
 	//fb::log($files);
 	fb::log(ABSPATH,'ABSPATH');
