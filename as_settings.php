@@ -204,11 +204,13 @@ function check_theme_name($theme){
 function delete_themes(){
 	global $wpdb;
 	$theme_list_table = $wpdb->prefix . "app_switcher_theme_list";
+	
 	$del_sql = "DELETE FROM $theme_list_table WHERE id IN (";
 	$del_files = "SELECT css_location, image_location FROM $theme_list_table WHERE id IN (";
 	foreach ($_POST['delete'] as $del_theme){
 		$del_sql .= "'$del_theme',";
 		$del_files .= "'$del_theme',";
+		delete_theme_files($del_theme);
 	}
 	$del_sql = substr($del_sql,0,-1); //remove last comma
 	$del_files = substr($del_files,0,-1); //remove last comma
@@ -230,11 +232,23 @@ function delete_themes(){
 	if ($passed) {//if all deletes successful, delete from database.
 		$wpdb->query($del_sql);
 	} else {
-		echo "<h2 class='warning'>DELETE FAILED</h2>";
+		echo "<h2 class='error'>DELETE FAILED</h2>";
 	}//*/
 	
 	
 }
+function delete_theme_files($theme){
+	global $wpdb;
+	$theme_file_table = $wpdb->prefix . "app_switcher_zip_image_list";
+	$sql="SELECT image_path FROM $theme_file_table WHERE theme_id='$theme'";
+	$files = $wpdb->get_results($sql, ARRAY_A);
+	foreach($files as $file){
+		unlink($file['image_path']);
+	}
+	$wpdb->query("DELETE FROM $theme_file_table WHERE theme_id='$theme'");
+}
+
+
 function url_to_abs($string){
 	$string = str_replace(plugins_url('',__FILE__),ABSPATH.'/wp-content/plugins/app-switcher',$string);
 	return $string;
@@ -319,16 +333,24 @@ function image_file_type($file){
 }
 
 function move_directory_contents($directory,$destination){
-	
+	global $wpdb;
+	$theme_list_table = $wpdb->prefix . "app_switcher_zip_image_list";
+	$sql = "";
+	$theme_id = $_POST['theme'][0];
 	foreach (new DirectoryIterator($directory) as $file) {
 		
 		$cur_file = $file->getPathname();
 		$new_file = $destination.$file->getFilename();
 		if(!$file->isDir() && !$file->isDot()){
+			$wpdb->query("INSERT INTO $theme_list_table (theme_id, image_path) VALUES ('$theme_id','$new_file')");
+			
 			copy($cur_file,$new_file);
 		} 
+		$sql = substr($sql,0,-1); //remove last comma
+		
 		
 	}
+	
 }
 
 function delete_directory($path){

@@ -78,6 +78,14 @@ function app_switcher_uninstall () {
 	
 	
 	delete_option("app_switcher_db_version");
+	//delete theme files
+	$dir = ABSPATH . 'wp-content/plugins/app-switcher/css/';
+	foreach (new DirectoryIterator($dir.'images/') as $file){
+		if (!$file->isDot() && $file->isDir()){
+			recursive_dir_del($file->getPathname());
+		}
+	}
+	
 	
 }
 register_activation_hook(__FILE__,'app_switcher_install');

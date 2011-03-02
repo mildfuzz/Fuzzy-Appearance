@@ -92,4 +92,18 @@ if(!function_exists('scandir')){
      }
 }
 
+//deletes folders, sub-folders and contents.
+if(!function_exists('recursive_dir_del')){
+function recursive_dir_del($path, $contents_only = false){
+	foreach (new DirectoryIterator($path) as $file) {
+		$cur_file = $file->getPathname();
+		if(!$file->isDir() && !$file->isDot()){
+			unlink($cur_file);
+		} elseif (!$file->isDot()){
+			recursive_dir_del($file->getPathname());
+		}
+	}
+	if(!$contents_only) rmdir($path);
+}
+}
 ?>
