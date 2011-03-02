@@ -248,7 +248,7 @@ function zip_upload(){
 	}
 }
 function validate_zip_upload(){
-	fb::log($_FILES);
+	
 	if(!isset($_POST['theme'])){
 		echo "<h4 class='error'>Must choose a theme for upload</h4>";
 		$failed = true;
@@ -267,19 +267,80 @@ function process_zip_upload(){
 	global $wpdb;
 	$dir = ABSPATH . 'wp-content/plugins/app-switcher/css/images/';
 	$zip = new zipArchive();
-	
+	$random_folder = $dir."tmp_".rand(10000,99999);
 	$x=$zip->open($dir);
-	fb::log($_FILES['zip_file']['tmp_name']);
+	
 	if ($zip->open($_FILES['zip_file']['tmp_name'])){
-	     for($i = 0; $i < $zip->numFiles; $i++){  
-	          fb::log($zip->getNameIndex($i),'Filename: ');
-	     }
-	} else {
-	     fb::log('Error reading zip-archive!');
+		
+		mkdir($random_folder);
+		$zip->extractTo($random_folder);
+		
+		temp_folder_sort($random_folder, $dir);
+		
+		
+		
+	} 
+	
+	
+}
+
+function temp_folder_sort($temp_folder, $permanent_folder){
+	
+	foreach (new DirectoryIterator($temp_folder) as $fileInfo) {
+	    if(!$fileInfo->isDir() && !$fileInfo->isDot()){
+			$cur_file = $fileInfo->getPathname();
+			if(!image_file_type($cur_file)) {
+				unlink($cur_file); //delete non images
+			} else {
+	    		$files[] = getimagesize($fileInfo->getPathname());//write file name to array
+			}
+		} elseif($fileInfo->isDir() && !$fileInfo->isDot()) {
+			if($fileInfo->getBasename() != '__MACOSX'){//prevents keeping OSX's entirely useless extra folder.
+				$sub_folder = $permanent_folder.$fileInfo->getBasename().'/';
+				if(!is_dir($sub_folder)) mkdir($sub_folder); //make subdirectory is one doesn't already exist. Keeps folder heirarchy of files.
+			
+				temp_folder_sort($fileInfo->getPathname(),$sub_folder);
+			}
+		}
 	}
 	
-	/*if($x===true){
-		$zip->extractTo
-	}//*/
+	
+	move_directory_contents($temp_folder,$permanent_folder);
+	delete_directory($temp_folder);
+	
+	
+	
 }
+
+function image_file_type($file){
+	$image = getimagesize($file);
+	if(!$image) return false;//return false if not an image
+	return $image['mime'];
+}
+
+function move_directory_contents($directory,$destination){
+	
+	foreach (new DirectoryIterator($directory) as $file) {
+		
+		$cur_file = $file->getPathname();
+		$new_file = $destination.$file->getFilename();
+		if(!$file->isDir() && !$file->isDot()){
+			copy($cur_file,$new_file);
+		} 
+		
+	}
+}
+
+function delete_directory($path){
+	foreach (new DirectoryIterator($path) as $file) {
+		$cur_file = $file->getPathname();
+		if(!$file->isDir() && !$file->isDot()){
+			unlink($cur_file);
+		} elseif (!$file->isDot()){
+			rmdir($cur_file);
+		}
+	}
+	rmdir($path);
+}
+
 ?>

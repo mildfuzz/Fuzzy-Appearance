@@ -75,4 +75,21 @@ if (!function_exists('rebuildURL')){
 		
 	}
 }
+
+//if running on php4, make a scandir functions
+if(!function_exists('scandir')){
+     function scandir($directory, $sorting_order = 0) {
+         $dh  = opendir($directory);
+         while( false !== ($filename = readdir($dh)) ) {
+             $files[] = $filename;
+         }
+         if( $sorting_order == 0 ) {
+             sort($files);
+         } else {
+             rsort($files);
+         }
+         return($files);
+     }
+}
+
 ?>
