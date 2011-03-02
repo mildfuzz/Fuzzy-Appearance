@@ -75,4 +75,35 @@ if (!function_exists('rebuildURL')){
 		
 	}
 }
+
+//if running on php4, make a scandir functions
+if(!function_exists('scandir')){
+     function scandir($directory, $sorting_order = 0) {
+         $dh  = opendir($directory);
+         while( false !== ($filename = readdir($dh)) ) {
+             $files[] = $filename;
+         }
+         if( $sorting_order == 0 ) {
+             sort($files);
+         } else {
+             rsort($files);
+         }
+         return($files);
+     }
+}
+
+//deletes folders, sub-folders and contents.
+if(!function_exists('recursive_dir_del')){
+function recursive_dir_del($path, $contents_only = false){
+	foreach (new DirectoryIterator($path) as $file) {
+		$cur_file = $file->getPathname();
+		if(!$file->isDir() && !$file->isDot()){
+			unlink($cur_file);
+		} elseif (!$file->isDot()){
+			recursive_dir_del($file->getPathname());
+		}
+	}
+	if(!$contents_only) rmdir($path);
+}
+}
 ?>
