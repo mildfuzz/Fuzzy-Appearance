@@ -25,13 +25,15 @@ function as_create_theme_selection_list(){
 	global $wpdb;
 	$theme_list_table = $wpdb->prefix . "app_switcher_theme_list";
 	$results = $wpdb->get_results("SELECT * FROM $theme_list_table;", ARRAY_A);
+	
+	if (count($results) > 0) :
 	?><ul id="theme_selection"><?php
 	foreach($results as $result){
 		$theme_name = str_replace('_',' ',$result['theme_name']);
 		?><a href="<?php echo addURLQuery("theme-selection=".$result['theme_name']); ?>" id="<?php echo $result['theme_name']; ?>" class="theme"><?php echo $theme_name; ?></a> <?php
 	}
 	?></ul><?php
-	//fb::log($results);
+	endif;
 }
 wp_register_sidebar_widget('as_theme_selector','AS Theme Selector','as_create_theme_selection_list');
 
@@ -63,9 +65,10 @@ function as_log_choice_database(){
 
 function as_theme_choice_processing(){
 	//if(!isset($_SESSION['curl']) return null;
+	
 	$ip_result = as_check_ip();
 	
-	
+	if(as_fetch_css($_COOKIE['as_theme_selection']) != NULL) :
 	
 	if(!$ip_result && !isset($_GET['theme-selection']) && !isset($_COOKIE['as_theme_selection'])){
 		 ?> <link rel="stylesheet" href="<?php echo as_fetch_css('theme-1'); ?>
@@ -91,6 +94,7 @@ function as_theme_choice_processing(){
 		return true;
 	}
 	
+	endif; //end NULL check
 	
 }
 
