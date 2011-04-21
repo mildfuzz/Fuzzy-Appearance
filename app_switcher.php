@@ -27,41 +27,45 @@ License: GPL2
 */
 //Install and Uninstall
 global $app_switcher_db_version;
-$app_switcher_db_version = "0.1";
+$app_switcher_db_version = "0.2";
 
 
 function app_switcher_install () {
    global $wpdb;
 
    	$ip_list_table = $wpdb->prefix . "app_switcher_ip_list";
-	$theme_list_table = $wpdb->prefix . "app_switcher_theme_list";
-	$zip_image_connect_table = $wpdb->prefix . "app_switcher_zip_image_list";
+	$zip_theme_table = $wpdb->prefix . "app_switcher_zip_theme_list";
+	$css_file_table = $wpdb->prefix . "app_switcher_css_file_list";
 	if($wpdb->get_var("SHOW TABLES LIKE '$ip_list_table'") != $ip_list_table &&  $wpdb->get_var("SHOW TABLES LIKE '$theme_list_table'") != $theme_list_table &&  $wpdb->get_var("SHOW TABLES LIKE '$zip_image_connect_table'") != $zip_image_connect_table) {
-		$sql = "CREATE TABLE " . $ip_list_table . " (
+		$sql[] = "CREATE TABLE " . $ip_list_table . " (
 			  id mediumint(9) NOT NULL AUTO_INCREMENT,
 			  ip text NOT NULL,
 			  theme text NOT NULL,
 			  UNIQUE KEY id (id)
 			);";
-		$sql2 = "CREATE TABLE " . $theme_list_table . " (
+	
+		$sql[] = "CREATE TABLE " . $zip_theme_table . " (
 			  id mediumint(9) NOT NULL AUTO_INCREMENT,
 			  theme_name text NOT NULL,
-			  css_location text NOT NULL,
-			  image_location text NOT NULL,
+			  theme_path text NOT NULL,
+			  image_path text NOT NULL,
+			  is_default bool NOT NULL default 0,
 			  UNIQUE KEY id (id)
 			);";
-		$sql3 = "CREATE TABLE " . $zip_image_connect_table . " (
+		$sql[] = "CREATE TABLE " . $css_file_table . " (
 			  id mediumint(9) NOT NULL AUTO_INCREMENT,
-			  theme_id mediumint(9) NOT NULL,
-			  image_path text NOT NULL,
+			  theme_name text NOT NULL,
+			  css_path text NOT NULL,
 			  UNIQUE KEY id (id)
 			);";
 		
 
 		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-		dbDelta($sql);
-		dbDelta($sql2);
-		dbDelta($sql3);
+		foreach($sql as $table){
+			dbDelta($table);
+		}
+		
+		
 		add_option("app_switcher_db_version",$app_switcher_db_version);
 	}
 }
@@ -69,8 +73,9 @@ function app_switcher_uninstall () {
    global $wpdb;
 
    	$tables[] = $wpdb->prefix . "app_switcher_ip_list";
-	$tables[] = $wpdb->prefix . "app_switcher_theme_list";
-	$tables[] = $wpdb->prefix . "app_switcher_zip_image_list";
+	$tables[] = $wpdb->prefix . "app_switcher_zip_theme_list";
+	$tables[] = $wpdb->prefix . "app_switcher_css_file_list";
+	
 	
 	foreach($tables as $table){
 		$wpdb->query("DROP TABLE $table;");
@@ -79,8 +84,13 @@ function app_switcher_uninstall () {
 	
 	delete_option("app_switcher_db_version");
 	//delete theme files
-	$dir = ABSPATH . 'wp-content/plugins/app-switcher/css/';
-	foreach (new DirectoryIterator($dir.'images/') as $file){
+	$dir = ABSPATH . 'wp-content/plugins/app-switcher/';
+	foreach (new DirectoryIterator($dir.'themes/') as $file){
+		if (!$file->isDot() && $file->isDir()){
+			recursive_dir_del($file->getPathname());
+		}
+	}
+	foreach (new DirectoryIterator($dir.'thumbnails/') as $file){
 		if (!$file->isDot() && $file->isDir()){
 			recursive_dir_del($file->getPathname());
 		}

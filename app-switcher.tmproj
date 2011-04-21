@@ -7,176 +7,194 @@
 	<key>documents</key>
 	<array>
 		<dict>
-			<key>filename</key>
-			<string>as_settings.php</string>
-			<key>lastUsed</key>
-			<date>2011-03-16T15:33:57Z</date>
+			<key>name</key>
+			<string>.git</string>
+			<key>regexFolderFilter</key>
+			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>sourceDirectory</key>
+			<string>.git</string>
 		</dict>
 		<dict>
 			<key>filename</key>
-			<string>as_themes.php</string>
+			<string>.gitignore</string>
 			<key>lastUsed</key>
-			<date>2011-03-10T16:55:55Z</date>
+			<date>2011-04-13T09:50:49Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
-			<string>as_utilities.php</string>
-			<key>lastUsed</key>
-			<date>2011-03-16T15:33:55Z</date>
-		</dict>
-		<dict>
-			<key>filename</key>
-			<string>as_user_check.php</string>
-			<key>lastUsed</key>
-			<date>2011-03-16T15:33:57Z</date>
-			<key>selected</key>
-			<true/>
+			<string>ap_switch_settings_reference.php</string>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>app_switcher.php</string>
 			<key>lastUsed</key>
-			<date>2011-03-16T15:33:56Z</date>
+			<date>2011-04-15T11:01:54Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>app-switcher.tmproj</string>
 		</dict>
 		<dict>
-			<key>expanded</key>
-			<true/>
-			<key>name</key>
-			<string>css</string>
-			<key>regexFolderFilter</key>
-			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
-			<key>sourceDirectory</key>
-			<string>css</string>
+			<key>filename</key>
+			<string>as_settings.php</string>
+			<key>lastUsed</key>
+			<date>2011-04-18T13:40:26Z</date>
 		</dict>
 		<dict>
 			<key>filename</key>
 			<string>as_themes.php</string>
 			<key>lastUsed</key>
-			<date>2011-02-25T14:45:53Z</date>
+			<date>2011-04-18T13:40:28Z</date>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>as_user_check.php</string>
+			<key>lastUsed</key>
+			<date>2011-04-20T15:54:45Z</date>
+			<key>selected</key>
+			<true/>
+		</dict>
+		<dict>
+			<key>filename</key>
+			<string>as_utilities.php</string>
+			<key>lastUsed</key>
+			<date>2011-04-18T13:56:59Z</date>
+		</dict>
+		<dict>
+			<key>expanded</key>
+			<true/>
+			<key>name</key>
+			<string>debug_mode</string>
+			<key>regexFolderFilter</key>
+			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>sourceDirectory</key>
+			<string>debug_mode</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>images</string>
+			<key>regexFolderFilter</key>
+			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>sourceDirectory</key>
+			<string>images</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>themes</string>
+			<key>regexFolderFilter</key>
+			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>sourceDirectory</key>
+			<string>themes</string>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>thumbnails</string>
+			<key>regexFolderFilter</key>
+			<string>!.*/(\.[^/]*|CVS|_darcs|_MTN|\{arch\}|blib|.*~\.nib|.*\.(framework|app|pbproj|pbxproj|xcode(proj)?|bundle))$</string>
+			<key>sourceDirectory</key>
+			<string>thumbnails</string>
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
 	<integer>200</integer>
 	<key>metaData</key>
 	<dict>
-		<key>app_switcher.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>36</integer>
-				<key>line</key>
-				<integer>67</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>as_settings.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>234</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>14</integer>
-		</dict>
-		<key>as_themes.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>107</integer>
-				<key>line</key>
-				<integer>10</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>98</integer>
-				<key>line</key>
-				<integer>10</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>107</integer>
-				<key>line</key>
-				<integer>10</integer>
-			</dict>
-		</dict>
-		<key>as_user_check.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>101</integer>
-				<key>line</key>
-				<integer>35</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>35</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>101</integer>
-				<key>line</key>
-				<integer>35</integer>
-			</dict>
-		</dict>
-		<key>as_utilities.php</key>
+		<key>ap_switch_settings_reference.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
 				<integer>1</integer>
 				<key>line</key>
-				<integer>58</integer>
+				<integer>162</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>43</integer>
+			<integer>107</integer>
+		</dict>
+		<key>as_settings.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>144</integer>
+				<key>line</key>
+				<integer>105</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>73</integer>
+		</dict>
+		<key>as_themes.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>1</integer>
+				<key>line</key>
+				<integer>12</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>as_user_check.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>18</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>as_utilities.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>40</integer>
+				<key>line</key>
+				<integer>16</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
+		<key>debug_mode/layout.css</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>6</integer>
+				<key>line</key>
+				<integer>4</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>as_settings.php</string>
-		<string>app_switcher.php</string>
 		<string>as_themes.php</string>
-		<string>as_utilities.php</string>
 		<string>as_user_check.php</string>
+		<string>debug_mode/layout.css</string>
+		<string>as_utilities.php</string>
+		<string>as_settings.php</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{-2, 5}, {1069, 1023}}</string>
+	<string>{{10, 16}, {907, 1010}}</string>
 </dict>
 </plist>
