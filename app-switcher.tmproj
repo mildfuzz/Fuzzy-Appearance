@@ -50,7 +50,7 @@
 			<key>filename</key>
 			<string>as_user_check.php</string>
 			<key>lastUsed</key>
-			<date>2011-04-20T15:54:45Z</date>
+			<date>2011-04-21T12:31:32Z</date>
 			<key>selected</key>
 			<true/>
 		</dict>
@@ -146,14 +146,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>1</integer>
 				<key>line</key>
-				<integer>18</integer>
+				<integer>88</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>77</integer>
 		</dict>
 		<key>as_utilities.php</key>
 		<dict>
