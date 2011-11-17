@@ -1,3 +1,3 @@
-Mild Fuzz Appearance Switcher for Wordpress
+Mild Fuzz Appearance Switcher Plugin for Wordpress
 
-Allows users to upload alternative CSS files and allow website visitors to select their favourite. Favourites are based on users unique IP
+Allows web masters to upload alternative CSS files and allow website visitors to select their favourite sub-theme
